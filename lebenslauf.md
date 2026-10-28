@@ -2,6 +2,7 @@
 name: "Alex Beispiel"
 titel: "IT-Support und Systemadministration"
 profil: "Fiktives Profil zur Demonstration. Alle Angaben sind erfunden."
+foto: "profilfoto.jpg"
 kontakt:
   Adresse: "Musterweg 10, 12345 Musterstadt"
   E-Mail: "alex@example.invalid"
