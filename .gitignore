@@ -1,0 +1,23 @@
+# Erzeugte Dokumente und TeX-Hilfsdateien
+*.pdf
+*.tex
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.tms
+*.fls
+*.fdb_latexmk
+/output/
+
+# Lokale Umgebungen und private Fotos
+__pycache__/
+*.py[cod]
+.venv/
+.env*
+*.jpg
+*.jpeg
+*.png
+.DS_Store
+Thumbs.db
