@@ -19,7 +19,7 @@ design:
   font_family: "Latin Modern Sans"
   font_size: "11pt"
   margin: "12mm"
-  photo_position: "none"
+  photo_position: "left"
   photo_width: "3.2cm"
 ---
 
