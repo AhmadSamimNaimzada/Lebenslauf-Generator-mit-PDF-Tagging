@@ -1,0 +1,209 @@
+% !TeX spellcheck = de_DE
+% !TeX program = lualatex
+
+\DocumentMetadata{
+  lang=de-DE,
+  pdfstandard=ua-2,
+  tagging = on,
+  pdfversion=2.0,
+  testphase={phase-III}
+}
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}              
+\usepackage[ngerman]{babel}
+\usepackage[margin=12mm]{geometry}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\AssignTaggingSocketPlug{para/semantic/begin}{noop}
+\AssignTaggingSocketPlug{para/semantic/end}{noop}
+
+\setmainfont{Latin Modern Sans}
+\setsansfont{Latin Modern Sans}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Typografische Farbdefinitionen
+\definecolor{cvblue}{HTML}{005580}
+\definecolor{subtext}{HTML}{555555}
+
+\tagpdfsetup{
+  math/mathml/luamml/load=false,
+  add-new-tag = Zeit/Span,
+  add-new-tag = Ausbildungsort/Em,
+  add-new-tag = Arbeitgeber/Em,
+  add-new-tag = Ziel/Div,
+  add-new-tag = Kategorie/Span,
+  add-new-tag = Kenntnisse/Span,
+  add-new-tag = Sprache/Span,
+  add-new-tag = Niveau/Span,
+  add-new-tag = KontaktLabel/Span,
+  add-new-tag = KontaktWert/Span
+}
+
+\setcounter{secnumdepth}{0}
+
+\newcommand{\tagtext}[2]{%
+  \tagstructbegin{tag=#1}%
+  \tagmcbegin{tag=#1}%
+  #2%
+  \tagmcend%
+  \tagstructend%
+}
+
+% Beschreibungen enthalten Absätze und Listen. Kein Inline-MC um den Block!
+% Die Rolle Ziel bleibt erhalten und wird auf den Blocktyp Div abgebildet.
+\newcommand{\tagblock}[2]{%
+  \tagstructbegin{tag=#1}%
+  #2\par%
+  \tagstructend%
+}
+
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+                               {-0.2ex}%
+                               {0.1ex}%
+                               {\normalfont\Large\bfseries\color{cvblue}\scshape}}
+\makeatother
+
+\newcommand{\cvsection}[1]{%
+  \section{#1}%
+  \vspace*{-0.6ex}%
+  \tagpdfparaOff
+  \noindent{\color{cvblue}\rule{\linewidth}{0.8pt}}\par
+  \vspace*{0.4ex}%
+  \tagpdfparaOn
+}
+
+% Foto ist optional; ohne Foto nutzt die Kopfzeile die ganze Breite.
+\newcommand{\cvheader}[4]{%
+  \begin{minipage}[t]{0.25\textwidth}\vspace{0pt}\includegraphics[width=3.2cm,alt={Porträtfoto}]{\detokenize{/data/profilfoto.jpg}}\end{minipage}\hfill\begin{minipage}[t]{0.73\textwidth}\vspace{0pt}\raggedright
+    {\Huge\bfseries\color{cvblue} #2}\par\vspace{0.4ex}
+    {\large\bfseries\color{subtext} #3}\par\vspace{1ex}
+    {\small #4}\par\end{minipage}
+  \vspace{1ex}%
+}
+
+% Linke Spalte (Sidebar)
+\newenvironment{kontakt}{\cvsection{Kontakt}}{}
+\newlength{\kontaktlabelwidth}
+\setlength{\kontaktlabelwidth}{1.85cm}
+\newcommand{\kitem}[2]{%
+  \noindent\hangindent=\kontaktlabelwidth\hangafter=1%
+  \makebox[\kontaktlabelwidth][l]{\tagtext{KontaktLabel}{\textbf{#1}}}%
+  \tagtext{KontaktWert}{#2}\par\vspace{0.4ex}%
+}
+
+\newenvironment{itkenntnisse}{\cvsection{IT-Kenntnisse}}{}
+\newcommand{\ititem}[2]{%
+  \noindent\tagtext{Kategorie}{\textbf{#1}}\newline
+  {\small \tagtext{Kenntnisse}{#2}}\par\vspace{0.5ex}%
+}
+
+\newenvironment{sprachen}{\cvsection{Sprachen}}{}
+\newcommand{\langitem}[2]{%
+  \noindent\tagtext{Sprache}{\textbf{#1}} (\tagtext{Niveau}{#2})\par\vspace{0.4ex}%
+}
+
+% Rechte Spalte (Werdegang)
+\newenvironment{ausbildung}{\cvsection{Ausbildung}}{}
+\newcommand{\eduitem}[4]{%
+  \noindent\textbf{#1}%
+  \hfill {\small\color{subtext}\mbox{\tagtext{Zeit}{#2}}}\newline
+  {\color{subtext}\tagtext{Ausbildungsort}{#3}}\par%
+  \ifx&#4&\else
+    {\small\tagblock{Ziel}{#4}}%
+  \fi
+  \vspace{1ex}%
+}
+
+\newenvironment{berufserfahrung}{\cvsection{Berufserfahrung}}{}
+\newcommand{\jobitem}[4]{%
+  \noindent\textbf{#1}%
+  \hfill {\small\color{subtext}\mbox{\tagtext{Zeit}{#2}}}\newline
+  {\color{subtext}\tagtext{Arbeitgeber}{#3}}\par%
+  \ifx&#4&\else
+    {\small\tagblock{Ziel}{#4}}%
+  \fi
+  \vspace{1ex}%
+}
+
+\hypersetup{
+  colorlinks = true, 
+  urlcolor = cvblue, 
+  linkcolor = cvblue,
+  pdftitle={Lebenslauf Alex Beispiel},
+  pdfauthor={Alex Beispiel}
+}
+
+\begin{document}
+\setlength{\topskip}{0pt}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\pagestyle{empty}
+
+% Header
+\cvheader{}
+         {Alex Beispiel}
+         {IT-Support und Systemadministration}
+         {Fiktives Profil zur Demonstration. Alle Angaben sind erfunden.}
+
+% Layout-Raster
+\begin{minipage}[t]{0.33\textwidth}
+\raggedright
+
+  \begin{kontakt}
+    \kitem{Adresse:}{\small Musterweg 10,\newline 12345 Musterstadt}
+    \kitem{E-Mail:}{\href{mailto:alex@example.invalid}{\small alex@example.invalid}}
+    \kitem{Telefon:}{\small +00 000 000000}
+  \end{kontakt}%
+  \vspace{0.3em}%
+  %
+  \begin{itkenntnisse}
+    \ititem{Systeme}{Windows, Linux – Grundlagen}
+    \ititem{Netzwerke}{TCP/IP, DNS, DHCP und VLANs}
+    \ititem{Werkzeuge}{Python, Git und Virtualisierung}
+  \end{itkenntnisse}%
+  \vspace{0.3em}%
+  %
+  \begin{sprachen}
+    \langitem{Deutsch}{Sehr gute Kenntnisse (Beispiel)}
+    \langitem{Englisch}{Technische Dokumentation (Beispiel)}
+  \end{sprachen}%
+  %
+\tagpdfsetup{sec/end=-10}%
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.64\textwidth}
+\raggedright
+
+  \begin{ausbildung}
+    \eduitem{Lehrgang IT-Systemtechnik}
+            {2023–2025}
+            {Beispiel-Akademie, Musterstadt}
+            {\begin{itemize}[left-margin=1.1em, label-sep=0.35em, label-width=0.75em, item-vspace=1pt, begin-vspace=2pt, end-vspace=2pt, begin-extra-vspace=0pt, end-extra-vspace=0pt, para-vspace=0pt]
+    \item Windows- und Linux-Systeme in einer Testumgebung einrichten
+    \item DNS- und Netzwerkfehler eingrenzen
+    \item Konfigurationen und Lösungswege dokumentieren
+\end{itemize}}
+  \end{ausbildung}%
+  \vspace{0.3em}%
+  %
+  \begin{berufserfahrung}
+    \jobitem{Praktikum im IT-Support}
+            {2024}
+            {Example IT GmbH, Musterstadt}
+            {\begin{itemize}[left-margin=1.1em, label-sep=0.35em, label-width=0.75em, item-vspace=1pt, begin-vspace=2pt, end-vspace=2pt, begin-extra-vspace=0pt, end-extra-vspace=0pt, para-vspace=0pt]
+    \item Supportanfragen im Übungssystem bearbeiten
+    \item Testgeräte einrichten und inventarisieren
+\end{itemize}}
+  \end{berufserfahrung}%
+\cvsection{Projekte}
+\eduitem{Virtuelles Testnetz}{2025}{Fiktives Lernprojekt}{\noindent Clients und Server in einem getrennten Netzwerk verbinden. Die Angaben dienen ausschließlich als Layoutbeispiel.\par}
+  %
+\tagpdfsetup{sec/end=-10}%
+\end{minipage}
+
+\end{document}
